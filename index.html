@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>外在 OuterStyle · 男生的穿搭审美教练</title>
+<meta name="description" content="把衣橱里已有的单品挑成一套，说清每件在配色里扮演什么角色。拍一张照片就能录入单品，身材数据只存在本机。持续提高审美，而不是一次性的虚拟试衣。">
+<link rel="canonical" href="https://dpenglish-com.github.io/outerstyle-site/">
+<meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F172A" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="外在 OuterStyle · 男生的穿搭审美教练">
+<meta property="og:description" content="把衣橱里已有的单品挑成一套，说清每件在配色里扮演什么角色。持续提高审美，而不是一次性的虚拟试衣。">
+<meta property="og:url" content="https://dpenglish-com.github.io/outerstyle-site/">
+<meta property="og:image" content="https://dpenglish-com.github.io/outerstyle-site/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- 站点图标：深藏青底 + 一个衣架（与 App 的「着装」主题同一意象）。
+     衣架用两笔矢量路径画出，不依赖系统字体，也不随主题切换。 -->
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+<script>document.documentElement.className += " js";</script>
+<link rel="stylesheet" href="./styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "外在 OuterStyle",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "Android 8.0 及以上",
+  "softwareVersion": "0.2.0",
+  "url": "https://dpenglish-com.github.io/outerstyle-site/",
+  "description": "男生的穿搭审美教练。从衣橱里已有的单品挑出一套搭配，说清每件在配色里扮演什么角色，并解释为什么这样搭成立。",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+  "featureList": [
+    "拍照录入单品，服务端识别品类、颜色与版型",
+    "按品类从衣橱挑成一套搭配",
+    "解释每件的主色 / 底色 / 点缀色角色",
+    "每天一节的审美训练",
+    "本地 2D 比例预览",
+    "身材数据仅保存在本机",
+    "深色模式"
+  ]
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<header class="site-header" id="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path class="hook" d="M16 12.6V10.9A2.6 2.6 0 1 0 13.4 8.3"/>
+        <path class="rail" d="M16 12.6 5.9 18.4a1.7 1.7 0 0 0 .85 3.1h18.5a1.7 1.7 0 0 0 .85-3.1L16 12.6Z"/>
+      </svg>
+      <span>外在 OuterStyle</span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <a href="#why">为什么</a>
+      <a href="#how">怎么用</a>
+      <a href="#features">功能</a>
+      <a href="#privacy">隐私</a>
+      <a class="nav-cta" href="#download">下载</a>
+      <span class="nav-marker" aria-hidden="true"></span>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="top">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <h1 class="rise rise-1">今天，<br>穿得更明白。</h1>
+        <p class="hero-sub rise rise-2">持续提高审美，而不是一次性的虚拟试衣工具。它从你已有的衣服里挑一套，并说清为什么这样搭成立。</p>
+        <div class="hero-actions rise rise-3">
+          <a class="btn btn-primary" href="./downloads/OuterStyle-0.2.0-debug.apk" download>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 11l5 5 5-5"/><path d="M12 4v12"/></svg>
+            下载 APK
+          </a>
+          <a class="btn btn-quiet" href="#why">先看看它怎么运作</a>
+        </div>
+        <dl class="hero-facts rise rise-4">
+          <div><dt>版本</dt><dd>0.2.0</dd></div>
+          <div><dt>体积</dt><dd>19.1 MB</dd></div>
+          <div><dt>系统</dt><dd>Android 8.0+</dd></div>
+        </dl>
+      </div>
+
+      <!-- 真实设备截图：模拟器实机截取，非示意图 -->
+      <div class="hero-visual">
+        <figure class="shot shot-main" data-reveal>
+          <img src="./assets/shots/today.webp" width="720" height="1105"
+               alt="外在首页：顶部「外在」标识与「今天，穿得更明白。」标题，下面是今日搭配卡片，显示「今日搭配 · 通勤」「79 分 · 通勤」与一组配色色块，底部是今天 / 衣橱 / 训练 / 我的四个标签" fetchpriority="high" decoding="async">
+        </figure>
+        <figure class="shot shot-sub" data-reveal>
+          <img src="./assets/shots/wardrobe.webp" width="720" height="1105" loading="lazy" decoding="async"
+               alt="衣橱页：标题「我的衣橱」与「先把拥有的东西看清楚，再谈买什么。」，右上角是上传按钮，下面是全部 / 上装 / 下装 等品类筛选；空衣橱时显示一个衣架图案与「衣橱还是空的，上传一件你自己的衣服，先从颜色和版型开始。」">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHY ===================== -->
+  <section class="section" id="why">
+    <div class="wrap">
+      <h2 data-reveal>虚拟试衣给你一张图。<br>它给不了你的眼睛。</h2>
+      <div class="split">
+        <div class="split-text" data-reveal>
+          <p>把衣服贴到模特身上，看一眼，关掉。这类工具解决的是「这套穿在我身上大概什么样」，看完还是不知道它为什么好看、换成别的行不行。</p>
+          <p>外在换了个方向：它只用你衣橱里已经有的东西，挑出一套，然后告诉你每件在配色里扮演什么角色——谁是主色，谁是底色，点缀落在哪，哪里会有风险。</p>
+          <p class="split-kicker">看懂一次搭配的道理，下次自己就能判断。这是它能陪你久一点的原因。</p>
+        </div>
+        <figure class="shot" data-reveal>
+          <img src="./assets/shots/lessons.webp" width="720" height="1105" loading="lazy" decoding="async"
+               alt="审美训练页：标题「审美训练」与「每天只练一个判断，慢慢形成自己的眼睛。」，下面是一张深色课程卡，写着「第 01 课 · 点缀色」「哪一套更耐看？」，右侧一排进度点表示这是一周七课中的第一课">
+          <figcaption>每天只练一个判断。选完才展开解释，先自己看，再看答案。</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW ===================== -->
+  <section class="section section-tint" id="how">
+    <div class="wrap">
+      <h2 data-reveal>一件衣服，从照片到一套搭配</h2>
+      <ol class="steps" id="steps">
+        <li data-reveal>
+          <h3>拍一张照片</h3>
+          <p>对着单品拍一张，照片在本机压到 1600px 再上传。登录后自动识别，未登录也可以手动填写。</p>
+        </li>
+        <li data-reveal>
+          <h3>确认属性</h3>
+          <p>识别会给出品类、颜色和版型的建议，但保存前由你逐项确认。识别结果只是建议，不是结论。</p>
+        </li>
+        <li data-reveal>
+          <h3>挑一套出来</h3>
+          <p>按上装、下装、外套、鞋履、饰品各挑一件，凑成一套。它只从你已有的衣服里选，不推销任何新东西。</p>
+        </li>
+        <li data-reveal>
+          <h3>看懂为什么</h3>
+          <p>给出颜色角色的解释与需要注意的地方，并留下「下一课」：这次没弄懂的点，接着练。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURES ===================== -->
+  <section class="section" id="features">
+    <div class="wrap">
+      <h2 data-reveal>功能</h2>
+      <div class="feature-groups">
+        <div class="group" data-reveal>
+          <h3>衣橱</h3>
+          <dl>
+            <dt>拍照录入</dt>
+            <dd>上传后自动识别品类、颜色与版型，确认后入库。未登录时由你手动填写名称、品类和版型。</dd>
+            <dt>按品类管理</dt>
+            <dd>上装、下装、外套、鞋履、饰品分开看，先把拥有的东西看清楚，再谈买什么。</dd>
+          </dl>
+        </div>
+        <div class="group" data-reveal>
+          <h3>搭配</h3>
+          <dl>
+            <dt>从衣橱里挑一套</dt>
+            <dd>按品类各选一件组成搭配，并给出风格评分与「为什么成立」的三条理由。</dd>
+            <dt>解释颜色角色</dt>
+            <dd>说清哪件是主色、哪件是底色、点缀落在哪，以及这一套在比例和温度上要注意什么。</dd>
+          </dl>
+        </div>
+        <div class="group" data-reveal>
+          <h3>训练与预览</h3>
+          <dl>
+            <dt>每天一课</dt>
+            <dd>一节课只练一个判断：给出两套配色，先自己选更耐看的那套，再看解释。</dd>
+            <dt>2D 比例预览</dt>
+            <dd>按你的身高与肩腰比例，在本机画出一个轮廓提示。它只是比例示意，不代表真实尺码或合体结果。</dd>
+          </dl>
+        </div>
+      </div>
+      <p class="feature-more" data-reveal>另有深色模式、登录后自动识别、未登录可用的本地衣橱与训练。</p>
+    </div>
+  </section>
+
+  <!-- ===================== PRIVACY ===================== -->
+  <section class="section section-ink" id="privacy">
+    <div class="wrap">
+      <h2 data-reveal>身材数据不出这台手机。</h2>
+      <div class="privacy-grid">
+        <div class="privacy-lead" data-reveal>
+          <p>这不是隐私政策里的一句承诺，而是可以从权限与代码上核对的做法。</p>
+          <p>搭配由服务端生成，需要联网；但身材数据只保存在本机，不随搭配请求上传。上传的只有你选择用于识别的单品照片。</p>
+        </div>
+        <ul class="verify-list" data-reveal>
+          <li>
+            <span class="verify-k">模型密钥</span>
+            <span class="verify-v">只在服务端</span>
+            <p>APK 内没有任何模型供应商的 Key，也不允许用户填写 Key。识别请求由服务端代理。</p>
+          </li>
+          <li>
+            <span class="verify-k">身材数据</span>
+            <span class="verify-v">仅本机</span>
+            <p>身高、肩宽、腰围只用于本地的比例提示，当前版本不会发送到服务器。</p>
+          </li>
+          <li>
+            <span class="verify-k">登录凭证</span>
+            <span class="verify-v">Keystore 加密</span>
+            <p>登录 token 用 Android Keystore 的 AES-GCM 加密后保存，不参与系统备份。</p>
+          </li>
+          <li>
+            <span class="verify-k">注销账号</span>
+            <span class="verify-v">一并清除</span>
+            <p>注销会删除服务端的账号与识别记录，并清空本机的衣橱数据。</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DOWNLOAD ===================== -->
+  <section class="section" id="download">
+    <div class="wrap">
+      <h2 data-reveal>下载</h2>
+      <div class="download-panel" data-reveal>
+        <div class="download-main">
+          <p class="download-note">直接安装，无需 Google Play。</p>
+          <a class="btn btn-primary btn-large" href="./downloads/OuterStyle-0.2.0-debug.apk" download>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M7 11l5 5 5-5"/><path d="M12 4v12"/></svg>
+            下载 APK（19.1 MB）
+          </a>
+          <p class="download-hint">首次安装需在系统提示里允许「安装未知来源应用」。当前是内测调试构建，用手机号验证码登录（开发期不发送真实短信）。</p>
+        </div>
+        <dl class="download-specs">
+          <div><dt>版本</dt><dd>0.2.0</dd></div>
+          <div><dt>文件大小</dt><dd>19.1 MB</dd></div>
+          <div><dt>系统要求</dt><dd>Android 8.0 及以上</dd></div>
+          <div><dt>构建类型</dt><dd>debug 内测</dd></div>
+          <div class="spec-wide"><dt>SHA-256</dt><dd><code class="hash">988c45ab0b129801a7b023040888ea252abb55236fb9e517722cb23854e0fca5</code></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" id="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg class="brand-mark brand-mark-lg" viewBox="0 0 32 32" aria-hidden="true">
+        <path class="hook" d="M16 12.6V10.9A2.6 2.6 0 1 0 13.4 8.3"/>
+        <path class="rail" d="M16 12.6 5.9 18.4a1.7 1.7 0 0 0 .85 3.1h18.5a1.7 1.7 0 0 0 .85-3.1L16 12.6Z"/>
+      </svg>
+      <div>
+        <strong>外在 OuterStyle</strong>
+        <span>男生的穿搭审美教练</span>
+      </div>
+    </div>
+
+    <div class="footer-contact">
+      <p class="footer-contact-title">作者与反馈</p>
+      <p class="footer-contact-line">
+        作者 <strong>肖恩</strong> · 微信 <span class="footer-wechat">16659317774</span>（添加请备注 外在）
+      </p>
+      <p class="footer-copy">© <span id="year">2026</span> 外在 OuterStyle · 持续提高审美，而非一次性的虚拟试衣工具。</p>
+    </div>
+  </div>
+</footer>
+
+<script src="./main.js" defer></script>
+</body>
+</html>
