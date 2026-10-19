@@ -14,7 +14,7 @@
   --card:      #1E293B;              /* Graphite 卡片 */
   --ink:       #F8FAFC;              /* 正文     16.9:1 on --bg */
   --ink-2:     #94A3B8;              /* 二级文字  7.0:1 */
-  --ink-3:     #7E8FA6;              /* 三级文字  5.4:1（Slate500 #64748B 只有 3.8:1，不够）*/
+  --ink-3:     #8B9CB2;              /* 三级文字  6.4:1（卡片上 5.2:1；#7E8FA6 在卡片上只有 4.4:1，不够）*/
   --hair:      rgba(248, 250, 252, .14);
   --hair-2:    rgba(248, 250, 252, .30);
   --accent:    #F97316;              /* 品牌橙：细线、圆点、按钮底   6.4:1 */
@@ -51,8 +51,8 @@
   --measure: 34em;
 
   --gutter: clamp(20px, 5vw, 64px);
-  --maxw: 1160px;
-  --step: clamp(68px, 7.5vw, 112px);
+  --maxw: 1240px;
+  --step: clamp(72px, 8vw, 128px);
 
   --dur-micro: 160ms;
   --dur-ui: 240ms;
@@ -70,7 +70,7 @@
     --card:      #FFFFFF;
     --ink:       #0F172A;            /* 正文     17.1:1 on --bg */
     --ink-2:     #475569;            /* 二级文字  7.2:1 */
-    --ink-3:     #64748B;            /* 三级文字  4.6:1 */
+    --ink-3:     #5B6B80;            /* 三级文字  5.2:1 on --bg，4.97:1 on --bg-2 */
     --hair:      rgba(15, 23, 42, .12);
     --hair-2:    rgba(15, 23, 42, .26);
     --accent:    #EA580C;            /* 浅底上的橙：细线与圆点     3.6:1 */
@@ -161,7 +161,9 @@ html { caret-color: var(--accent); scroll-behavior: smooth; }
   left: -9999px;
   top: 0;
   z-index: 100;
-  background: var(--accent);
+  /* 藏青底白字：品牌橙底上的浅色字只有 3.4:1，而跳转链接是键盘用户
+     第一个聚焦的元素，必须自己就达到 4.5:1。 */
+  background: var(--btn-bg);
   color: var(--btn-ink);
   padding: 12px 20px;
   text-decoration: none;
@@ -359,7 +361,8 @@ html { caret-color: var(--accent); scroll-behavior: smooth; }
   width: 100%;
   border: 1px solid var(--hair);
   background: var(--card);
-  border-radius: 10px;
+  /* 矩形面一律直角，与 WorkoutLoop / PaperEcho 同一套语言；截图内容本身也是直角 */
+  border-radius: 0;
   transition: transform var(--dur-ui) var(--ease-out-expo),
               border-color var(--dur-ui) var(--ease);
 }
@@ -638,6 +641,7 @@ html { caret-color: var(--accent); scroll-behavior: smooth; }
   margin-bottom: 10px;
 }
 .footer-contact-line { font-size: var(--t-small); color: var(--ink-2); }
+.footer-contact-sub { margin-top: 5px; }
 .footer-wechat { font-family: var(--mono); color: var(--ink); }
 .footer-copy { margin-top: 12px; font-size: var(--t-micro); color: var(--ink-3); }
 
