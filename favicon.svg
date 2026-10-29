@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="外在 OuterStyle">
-  <!-- 深藏青底 + 橙色衣架，与 App 的「着装」主题同一意象。
-       两笔矢量路径，不依赖系统字体；底色取深色主题的画布色。 -->
-  <rect width="32" height="32" rx="7" fill="#0F172A"/>
-  <g fill="none" stroke="#F97316" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 纸面底 + 墨色衣架 + 朱红点。零圆角，与站点同一套纸墨语言。 -->
+  <rect width="32" height="32" fill="#F4F1EA"/>
+  <g fill="none" stroke="#0A0A0A" stroke-linecap="round" stroke-linejoin="round">
     <path d="M16 13.6V11.6A2.6 2.6 0 1 0 13.4 9" stroke-width="2.1"/>
     <path d="M16 13.6 7.3 18.4a1.6 1.6 0 0 0 .8 2.9h15.8a1.6 1.6 0 0 0 .8-2.9L16 13.6Z" stroke-width="1.5"/>
   </g>
+  <circle cx="25.5" cy="25.5" r="2" fill="#C0432A"/>
 </svg>

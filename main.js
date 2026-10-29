@@ -1,232 +1,147 @@
-/* =========================================================================
-   外在 OuterStyle 宣传站 · 交互
-   与 WorkoutLoop / PaperEcho 两站同一套写法：每次动效都要能一句话说明理由，
-   全部一次性、不循环。无滚动劫持、无循环动画、无视差。零依赖。
-
-   滚动相关的四件事（进度线、导航状态、导航滑块、时间轴当前步）
-   共用一个 scroll 监听 + 一个 rAF，避免四个监听各自触发重排。
-   ========================================================================= */
+// 外在 OuterStyle：主题、滚动进度、入场、试一课、应用界面切换。无外部请求。
 (function () {
-  "use strict";
+  'use strict';
 
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var root = document.documentElement;
+  var themeBtn = document.getElementById('theme-toggle');
 
-  /* ---- 阅读进度细线 ---- */
-  function makeReadProgress() {
-    if (reduceMotion) return null;
-
-    var bar = document.createElement("div");
-    bar.className = "read-progress";
-    bar.setAttribute("aria-hidden", "true");
-    document.body.appendChild(bar);
-
-    return function () {
-      var doc = document.documentElement;
-      var max = doc.scrollHeight - doc.clientHeight;
-      var ratio = max > 0 ? Math.min(doc.scrollTop / max, 1) : 0;
-      bar.style.transform = "scaleX(" + ratio + ")";
-    };
+  function syncTheme() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    if (themeBtn) themeBtn.setAttribute('aria-label', dark ? '切换为浅色' : '切换为深色');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#0C0C0C' : '#F4F1EA');
   }
 
-  /* ---- 导航滚动状态 ---- */
-  function makeHeaderState() {
-    var header = document.getElementById("site-header");
-    if (!header) return null;
-    return function () {
-      header.classList.toggle("is-scrolled", window.scrollY > 8);
-    };
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('outerstyle-theme', next); } catch (e) {}
+      syncTheme();
+    });
+  }
+  syncTheme();
+
+  var head = document.querySelector('.site-head');
+  var bar = document.getElementById('progress-bar');
+  var ticking = false;
+
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset || 0;
+    if (head) head.classList.toggle('is-stuck', y > 8);
+    if (bar) {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = h > 0 ? Math.min(1, Math.max(0, y / h)) : 0;
+      bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    }
   }
 
-  /* ---- 导航滑块：当前在哪个区块 ---- */
-  function makeNavSpy() {
-    var nav = document.getElementById("site-nav");
-    if (!nav) return null;
-
-    var marker = nav.querySelector(".nav-marker");
-    var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
-    if (!marker || !links.length) return null;
-
-    var pairs = links.map(function (a) {
-      var id = a.getAttribute("href").slice(1);
-      var section = document.getElementById(id);
-      return section ? { link: a, section: section } : null;
-    }).filter(Boolean);
-    if (!pairs.length) return null;
-
-    var current = null;
-
-    function place(link) {
-      var base = parseFloat(
-        window.getComputedStyle(marker).getPropertyValue("--nav-base")
-      ) || 240;
-      marker.style.setProperty("--nav-x", link.offsetLeft + "px");
-      marker.style.setProperty("--nav-scale", String(link.offsetWidth / base));
-      marker.classList.add("is-on");
-    }
-
-    function update() {
-      var line = window.scrollY + window.innerHeight * 0.34;
-      var active = null;
-      for (var i = 0; i < pairs.length; i++) {
-        if (pairs[i].section.offsetTop <= line) active = pairs[i];
-      }
-      if (active === current) return;
-      if (current) {
-        current.link.classList.remove("is-active");
-        current.link.removeAttribute("aria-current");
-      }
-      current = active;
-      if (current) {
-        current.link.classList.add("is-active");
-        current.link.setAttribute("aria-current", "true");
-        place(current.link);
-      } else {
-        marker.classList.remove("is-on");
-      }
-    }
-
-    window.addEventListener("resize", function () {
-      if (current) place(current.link);
-    }, { passive: true });
-
-    return update;
-  }
-
-  /* ---- 时间轴：当前读到第几步 ---- */
-  function makeStepsSpy() {
-    var list = document.getElementById("steps");
-    if (!list) return null;
-
-    var items = Array.prototype.slice.call(list.children);
-    if (!items.length) return null;
-
-    var current = null;
-
-    function update() {
-      var line = window.innerHeight * 0.42;
-      var active = null;
-      for (var i = 0; i < items.length; i++) {
-        if (items[i].getBoundingClientRect().top <= line) active = items[i];
-      }
-      if (items[0].getBoundingClientRect().top > line) active = null;
-      if (active === current) return;
-      current = active;
-      items.forEach(function (li) { li.classList.toggle("is-current", li === current); });
-    }
-
-    return update;
-  }
-
-  /* ---- 首屏分段入场 ---- */
-  function initRise() {
-    var items = document.querySelectorAll(".rise");
-    if (!items.length) return;
-
-    if (reduceMotion) {
-      Array.prototype.forEach.call(items, function (el) { el.classList.add("is-in"); });
-      return;
-    }
+  function requestScroll() {
+    if (ticking) return;
+    ticking = true;
     window.requestAnimationFrame(function () {
-      window.requestAnimationFrame(function () {
-        Array.prototype.forEach.call(items, function (el) { el.classList.add("is-in"); });
-      });
+      onScroll();
+      ticking = false;
     });
   }
 
-  /* ---- 入场揭示：用 IntersectionObserver，每个元素只揭示一次 ---- */
-  function initReveal() {
-    var items = document.querySelectorAll("[data-reveal]");
-    if (!items.length) return;
+  onScroll();
+  window.addEventListener('scroll', requestScroll, { passive: true });
+  window.addEventListener('resize', requestScroll, { passive: true });
 
-    if (reduceMotion || !("IntersectionObserver" in window)) {
-      Array.prototype.forEach.call(items, function (el) { el.classList.add("is-visible"); });
-      return;
+  var year = document.getElementById('year');
+  if (year) year.textContent = String(new Date().getFullYear());
+
+  var items = document.querySelectorAll('.reveal');
+  if (items.length) {
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+      items.forEach(function (el) { io.observe(el); });
+    }
+  }
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.pstep'));
+  var frames = Array.prototype.slice.call(document.querySelectorAll('.preview-frame'));
+
+  function showScreen(id, focus) {
+    tabs.forEach(function (tab) {
+      var on = tab.getAttribute('data-screen') === id;
+      tab.classList.toggle('is-active', on);
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      if (on && focus) tab.focus();
+    });
+    frames.forEach(function (frame) {
+      var on = frame.id === 'screen-' + id;
+      frame.classList.toggle('is-active', on);
+      if (on) frame.removeAttribute('aria-hidden');
+      else frame.setAttribute('aria-hidden', 'true');
+    });
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () {
+      showScreen(tab.getAttribute('data-screen'));
+    });
+    tab.addEventListener('keydown', function (e) {
+      var next = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (i + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = tabs.length - 1;
+      if (next !== null) {
+        e.preventDefault();
+        showScreen(tabs[next].getAttribute('data-screen'), true);
+      }
+    });
+  });
+
+  var looks = Array.prototype.slice.call(document.querySelectorAll('.look'));
+  var verdict = document.getElementById('verdict');
+  var verdictText = document.getElementById('verdict-text');
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var copy = {
+    a: 'A。砖红只落在鞋上，面积不到一成；视线有落点，整体还是安静的。',
+    b: 'A。B 的砖红铺满上装，视线先被衣服抓住；鞋子再浅，也接不住。'
+  };
+
+  function choose(btn) {
+    var choice = btn.getAttribute('data-choice');
+    looks.forEach(function (el) {
+      el.setAttribute('aria-pressed', el === btn ? 'true' : 'false');
+    });
+    if (!verdict || !verdictText) return;
+
+    var wasOpen = verdict.classList.contains('is-open');
+    verdict.removeAttribute('inert');
+    verdict.setAttribute('aria-hidden', 'false');
+    verdictText.textContent = copy[choice] || copy.a;
+    verdict.classList.add('is-open');
+
+    if (verdictText.animate && !reduced) {
+      verdictText.animate(
+        [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' }
+      );
     }
 
-    var observer = new IntersectionObserver(function (entries) {
-      var batch = entries.filter(function (e) { return e.isIntersecting; });
-      batch.forEach(function (entry, i) {
-        var el = entry.target;
-        el.style.transitionDelay = (i * 70) + "ms";
-        el.classList.add("is-visible");
-        observer.unobserve(el);
-      });
-    }, {
-      threshold: 0.12,
-      rootMargin: "0px 0px -8% 0px"
-    });
-
-    Array.prototype.forEach.call(items, function (el) { observer.observe(el); });
-
-    /* 安全网：观察器在某些环境可能始终不报告可见，元素就会一直停在
-       opacity:0。只放行"此刻已经在视口内、却仍没被揭示"的元素，
-       不无差别放行，否则滚动揭示等于没有。 */
-    window.setTimeout(function () {
-      var vh = window.innerHeight || 0;
-      var degenerate = vh < 200;
-      Array.prototype.forEach.call(items, function (el) {
-        if (el.classList.contains("is-visible")) return;
-        var r = el.getBoundingClientRect();
-        var inView = r.top < vh && r.bottom > 0;
-        if (degenerate || inView) {
-          el.style.transitionDelay = "0ms";
-          el.classList.add("is-visible");
-          observer.unobserve(el);
-        }
-      });
-    }, 1200);
-  }
-
-  /* ---- 截图解码失败兜底 ---- */
-  function initShotFallback() {
-    var imgs = document.querySelectorAll(".shot img");
-    Array.prototype.forEach.call(imgs, function (img) {
-      img.addEventListener("error", function () {
-        var fig = img.closest(".shot");
-        if (fig) fig.classList.add("is-broken");
-      });
-    });
-  }
-
-  /* ---- 页脚年份 ---- */
-  function initYear() {
-    var el = document.getElementById("year");
-    if (el) el.textContent = String(new Date().getFullYear());
-  }
-
-  function init() {
-    var updaters = [
-      makeReadProgress(),
-      makeHeaderState(),
-      makeNavSpy(),
-      makeStepsSpy()
-    ].filter(Boolean);
-
-    if (updaters.length) {
-      var ticking = false;
-      function run() {
-        updaters.forEach(function (fn) { fn(); });
-        ticking = false;
-      }
-      function onScroll() {
-        if (ticking) return;
-        ticking = true;
-        window.requestAnimationFrame(run);
-      }
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll, { passive: true });
-      run();
+    if (!wasOpen && window.innerWidth <= 900) {
+      var top = verdict.getBoundingClientRect().top + window.pageYOffset - 84;
+      window.scrollTo({ top: top, behavior: reduced ? 'auto' : 'smooth' });
     }
-
-    initRise();
-    initReveal();
-    initShotFallback();
-    initYear();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
+  looks.forEach(function (btn) {
+    btn.addEventListener('click', function () { choose(btn); });
+  });
 })();
